@@ -1,0 +1,19 @@
+version: "3"
+services: 
+    ovsyunmeet:
+        build:
+            context: /dockerfile
+            dockerfile: Dockerfile_FreeSwitch
+        cap_add: 
+            - ALL
+        privileged: true
+        dns: 
+            - 8.8.8.8
+        network_mode: "host"
+        labels: 
+            description: "FreeSwitch Server"
+        working_dir: /opt/freeswitch
+        volumes: 
+            - /etc/localtime:/etc/localtime:ro
+            - ./freeswitch/conf/vars.xml:/opt/freeswitch/conf/vars.xml:rw
+        restart: always

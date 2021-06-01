@@ -1,0 +1,10 @@
+FROM ubuntu:20.04
+LABEL maintainer="liyaocong <375102274@qq.com>"
+WORKDIR /app/device
+RUN mkdir -p /opt/freeswitch
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+RUN apt-get clean
+RUN apt-get update -y && apt-get upgrade -y && apt-get install openssl libssl-dev -y
+ENV PATH $PATH:/opt/freeswitch/bin
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+STOPSIGNAL SIGTERM
