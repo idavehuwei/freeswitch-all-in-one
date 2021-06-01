@@ -3,8 +3,19 @@ LABEL maintainer="liyaocong <375102274@qq.com>"
 WORKDIR /app/device
 RUN mkdir -p /opt/freeswitch
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ xenial multiverse"  >> /etc/apt/source.list
+RUN echo "deb-src http://us.archive.ubuntu.com/ubuntu/ xenial multiverse"  >> /etc/apt/source.list
+RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse"  >> /etc/apt/source.list
+RUN echo "deb-src http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse"  >> /etc/apt/source.list
+RUN echo "deb http://cz.archive.ubuntu.com/ubuntu xenial main universe" >> /etc/apt/source.list
 RUN apt-get clean
-RUN apt-get update -y && apt-get upgrade -y && apt-get install openssl libssl-dev -y
+RUN apt-get update -y
+RUN apt-get install -y libedit-dev libldns-dev libpcre3-dev libspeexdsp-dev libspeex-dev libopus-dev libncurses5-dev 
+RUN apt-get install -y libtiff-dev libjpeg-dev libssl-dev apt-get install libsqlite3-dev build-essential automake autoconf 
+RUN apt-get install -y git wget libtool lua5.1 liblua5.1-dev libsndfile1-dev yasm libsndfile-dev libtool-bin sqlite3 libavformat-dev liblua5.2-dev 
+RUN apt-get install -y unixodbc-dev libswscale-dev libavresample-dev libpq-dev libsqlite3-dev libpcre3 libpcre3-dev  libspeex-dev libspeexdsp-dev libldns-dev 
+RUN apt-get install -y libedit-dev libladspa-ocaml-dev libmemcached-dev  libvlc-dev libv8-dev libyaml-dev uuid-dev libcurl4-openssl-dev 
+RUN apt-get install -y libtiff5-dev libpython2-dev  python-dev  erlang-dev unixodbc
 ENV PATH $PATH:/opt/freeswitch/bin
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 STOPSIGNAL SIGTERM
