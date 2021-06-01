@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 LABEL maintainer="liyaocong <375102274@qq.com>"
 WORKDIR /app/device
 RUN mkdir -p /opt/freeswitch
+RUN mkdir -p /opt/thirdpart
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
 RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ xenial multiverse"  >> /etc/apt/source.list
 RUN echo "deb-src http://us.archive.ubuntu.com/ubuntu/ xenial multiverse"  >> /etc/apt/source.list
@@ -10,12 +11,26 @@ RUN echo "deb-src http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse
 RUN echo "deb http://cz.archive.ubuntu.com/ubuntu xenial main universe" >> /etc/apt/source.list
 RUN apt-get clean
 RUN apt-get update -y
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get install gcc g++ gdb autoconf cmake -y
 RUN apt-get install -y libedit-dev libldns-dev libpcre3-dev libspeexdsp-dev libspeex-dev libopus-dev libncurses5-dev 
-RUN apt-get install -y libtiff-dev libjpeg-dev libssl-dev apt-get install libsqlite3-dev build-essential automake autoconf 
+RUN apt-get install -y libtiff-dev libjpeg-dev libssl-dev libsqlite3-dev build-essential automake autoconf 
 RUN apt-get install -y git wget libtool lua5.1 liblua5.1-dev libsndfile1-dev yasm libsndfile-dev libtool-bin sqlite3 libavformat-dev liblua5.2-dev 
 RUN apt-get install -y unixodbc-dev libswscale-dev libavresample-dev libpq-dev libsqlite3-dev libpcre3 libpcre3-dev  libspeex-dev libspeexdsp-dev libldns-dev 
 RUN apt-get install -y libedit-dev libladspa-ocaml-dev libmemcached-dev  libvlc-dev libv8-dev libyaml-dev uuid-dev libcurl4-openssl-dev 
 RUN apt-get install -y libtiff5-dev libpython2-dev  python-dev  erlang-dev unixodbc
+#RUN COPY thirdpart/cmake-3.16.2 /opt/thirdpart
+RUN COPY thirdpart/freeswitch-container /opt/thirdpart
+RUN COPY thirdpart/libks /opt/thirdpart
+RUN COPY thirdpart/signalwire-c /opt/thirdpart
+RUN COPY thirdpart/sofia-sip /opt/thirdpart
+RUN COPY thirdpart/spandsp /opt/thirdpart
+RUN COPY thirdpart/mysql-connector-odbc-setup_8.0.25-1ubuntu20.10_amd64.deb /opt/thirdpart
+RUN COPY freeswitch /opt/
+RUN cd /opt/thirdpart/cmake-3.16.2 && ./configure && gmake && gmake install
+RUN cd /opt/thirdpart/libks && cmake . && make && make install
+RUN cd /opt/thirdpart && dpkg -x /opt/thirdpart/mysql-connector-odbc-setup_8.0.20-1ubuntu20.04_amd64.deb && cp libmyodbc8a.so libmyodbc8w.so /usr/lib/x86_64-linux-gnu/odbc
+RUN cd /opt/freeswitch && ./bootstrap.sh && ./configure --prefix=/opt/freeswitch --with-gnu-ld --with-python --with-erlang --with-openssl --enable-portable-binary --enable-core-odbc-support --enable-zrtp && make && make install
 ENV PATH $PATH:/opt/freeswitch/bin
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 STOPSIGNAL SIGTERM

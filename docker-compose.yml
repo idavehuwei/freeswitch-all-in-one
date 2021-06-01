@@ -2,8 +2,8 @@ version: "3"
 services: 
     freeswitch:
         build:
-            context: /dockerfile
-            dockerfile: Dockerfile_FreeSwitch
+            context: dockerfile
+            dockerfile: DockerFile_FreeSwitch
         cap_add: 
             - ALL
         privileged: true
