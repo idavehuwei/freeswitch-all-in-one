@@ -1,6 +1,6 @@
 version: "3"
 services: 
-    ovsyunmeet:
+    freeswitch:
         build:
             context: /dockerfile
             dockerfile: Dockerfile_FreeSwitch
