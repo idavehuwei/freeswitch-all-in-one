@@ -20,13 +20,13 @@ RUN apt-get install -y unixodbc-dev libswscale-dev libavresample-dev libpq-dev l
 RUN apt-get install -y libedit-dev libladspa-ocaml-dev libmemcached-dev  libvlc-dev libv8-dev libyaml-dev uuid-dev libcurl4-openssl-dev 
 RUN apt-get install -y libtiff5-dev libpython2-dev  python-dev  erlang-dev unixodbc
 #RUN COPY thirdpart/cmake-3.16.2 /opt/thirdpart
-RUN COPY thirdpart/freeswitch-container /opt/thirdpart
-RUN COPY thirdpart/libks /opt/thirdpart
-RUN COPY thirdpart/signalwire-c /opt/thirdpart
-RUN COPY thirdpart/sofia-sip /opt/thirdpart
-RUN COPY thirdpart/spandsp /opt/thirdpart
-RUN COPY thirdpart/mysql-connector-odbc-setup_8.0.25-1ubuntu20.10_amd64.deb /opt/thirdpart
-RUN COPY freeswitch /opt/
+COPY thirdpart/freeswitch-container /opt/thirdpart
+COPY thirdpart/libks /opt/thirdpart
+COPY thirdpart/signalwire-c /opt/thirdpart
+COPY thirdpart/sofia-sip /opt/thirdpart
+COPY thirdpart/spandsp /opt/thirdpart
+COPY thirdpart/mysql-connector-odbc-setup_8.0.25-1ubuntu20.10_amd64.deb /opt/thirdpart
+COPY freeswitch /opt/
 RUN cd /opt/thirdpart/cmake-3.16.2 && ./configure && gmake && gmake install
 RUN cd /opt/thirdpart/libks && cmake . && make && make install
 RUN cd /opt/thirdpart && dpkg -x /opt/thirdpart/mysql-connector-odbc-setup_8.0.20-1ubuntu20.04_amd64.deb && cp libmyodbc8a.so libmyodbc8w.so /usr/lib/x86_64-linux-gnu/odbc
